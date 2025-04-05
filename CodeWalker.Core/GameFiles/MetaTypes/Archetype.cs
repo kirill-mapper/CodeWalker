@@ -738,7 +738,7 @@ namespace CodeWalker.GameFiles
                                 {
                                     var earch = rooment.Archetype;
                                     var pos = rooment._CEntityDef.position;
-                                    var ori = rooment.Orientation;
+                                    var rot = rooment._CEntityDef.rotation;
                                     Vector3 abmin = earch.BBMin * rooment.Scale; //entity box
                                     Vector3 abmax = earch.BBMax * rooment.Scale;
                                     c[0] = abmin;
@@ -749,9 +749,11 @@ namespace CodeWalker.GameFiles
                                     c[5] = new Vector3(abmax.X, abmin.Y, abmax.Z);
                                     c[6] = new Vector3(abmax.X, abmax.Y, abmin.Z);
                                     c[7] = abmax;
+                                    Quaternion quat = new Quaternion(rot.X, rot.Y, rot.Z, rot.W);
                                     for (int n = 0; n < 8; n++)
                                     {
-                                        Vector3 corn = ori.Multiply(c[n]) + pos;
+                                        Vector3 rotcorn = Vector3.Transform(c[n], quat);
+                                        Vector3 corn = rotcorn + pos;
                                         min = Vector3.Min(min, corn);
                                         max = Vector3.Max(max, corn);
                                     }
